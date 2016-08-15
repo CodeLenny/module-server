@@ -108,7 +108,7 @@ class ModuleTest
   @return {ModuleTest}
   ###
   html: (str) ->
-    @_body = Promise.resolve str
+    @_body = str
     @
 
   ###
@@ -189,8 +189,8 @@ class ModuleTest
   ###
   _index: (req, res) =>
     if not @_body
-      res.send ""
-      return console.log "No HTML!"
+      @_body = ""
+      return console.log "No HTML given, defaulting to an empty body"
     Promise
       .resolve @_body
       .then (body) ->
