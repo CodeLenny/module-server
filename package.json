@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cake test",
-    "extensive-test": "cake test --extensive"
+    "extensive-test": "cake --extensive test"
   },
   "repository": {
     "type": "git",
