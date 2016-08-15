@@ -41,60 +41,16 @@
 </div>
       <h2>Property Summary</h2>
       <dl class='properties'>
-        <dt id='describe-property'>
+        <dt id='DEBUG-property'>
           <span class='signature'>
-            (Mocha.describe)
+            (Boolean)
             <b>
-              describe
+              DEBUG
             </b>
           </span>
         </dt>
         <dd class='desc'>
-          a copy of the <code>describe</code> function from <a href="https://mochajs.org/">Mocha</a> 
-        </dd>
-        <dt id='it-property'>
-          <span class='signature'>
-            (Mocha.it)
-            <b>
-              it
-            </b>
-          </span>
-        </dt>
-        <dd class='desc'>
-          a copy of the <code>it</code> function from <a href="https://mochajs.org/">Mocha</a> 
-        </dd>
-        <dt id='before-property'>
-          <span class='signature'>
-            (Mocha.before)
-            <b>
-              before
-            </b>
-          </span>
-        </dt>
-        <dd class='desc'>
-          a copy of the <code>before</code> function from <a href="https://mochajs.org/">Mocha</a> 
-        </dd>
-        <dt id='after-property'>
-          <span class='signature'>
-            (Mocha.after)
-            <b>
-              after
-            </b>
-          </span>
-        </dt>
-        <dd class='desc'>
-          a copy of the <code>after</code> function from <a href="https://mochajs.org/">Mocha</a> 
-        </dd>
-        <dt id='chai-property'>
-          <span class='signature'>
-            (Chai)
-            <b>
-              chai
-            </b>
-          </span>
-        </dt>
-        <dd class='desc'>
-          a Chai testing instance 
+          <code>true</code> to print more messages while running. 
         </dd>
         <dt id='describeName-property'>
           <span class='signature'>
@@ -219,12 +175,24 @@
     <span class='signature'>
       <a href='#run-dynamic'>
         #
-(void)
+(ModuleTest)
 <b>run</b><span>(count = 1)</span>
       </a>
     </span>
     <span class='desc'>
       Runs the given tests in a <a href="https://mochajs.org/">Mocha</a> <code>describe</code> block the given number of times. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#chrome-dynamic'>
+        #
+(ModuleTest)
+<b>chrome</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Starts the testing server running via a Chrome browser for manual debugging. 
     </span>
   </li>
 </ul>
@@ -234,7 +202,7 @@
     <p class='signature' id='constructor-dynamic'>
       #
 (void)
-<b>constructor</b><span>(describe, it, before, after, chai, describeName)</span>
+<b>constructor</b><span>(describeName)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -244,56 +212,6 @@
 <div class='tags'>
   <h3>Parameters:</h3>
   <ul class='param'>
-    <li>
-      <span class='name'>describe</span>
-      <span class='type'>
-        (
-          <tt>Mocha.describe</tt>
-        )
-      </span>
-      &mdash;
-      <span class='desc'>a copy of the <code>describe</code> function from <a href="https://mochajs.org/">Mocha</a> </span>
-    </li>
-    <li>
-      <span class='name'>it</span>
-      <span class='type'>
-        (
-          <tt>Mocha.it</tt>
-        )
-      </span>
-      &mdash;
-      <span class='desc'>a copy of the <code>it</code> function from <a href="https://mochajs.org/">Mocha</a> </span>
-    </li>
-    <li>
-      <span class='name'>before</span>
-      <span class='type'>
-        (
-          <tt>Mocha.before</tt>
-        )
-      </span>
-      &mdash;
-      <span class='desc'>a copy of the <code>before</code> function from <a href="https://mochajs.org/">Mocha</a> </span>
-    </li>
-    <li>
-      <span class='name'>after</span>
-      <span class='type'>
-        (
-          <tt>Mocha.after</tt>
-        )
-      </span>
-      &mdash;
-      <span class='desc'>a copy of the <code>after</code> function from <a href="https://mochajs.org/">Mocha</a> </span>
-    </li>
-    <li>
-      <span class='name'>chai</span>
-      <span class='type'>
-        (
-          <tt>Chai</tt>
-        )
-      </span>
-      &mdash;
-      <span class='desc'>testing instance of Chai </span>
-    </li>
     <li>
       <span class='name'>describeName</span>
       <span class='type'>
@@ -557,7 +475,7 @@
   <div class='method_details'>
     <p class='signature' id='run-dynamic'>
       #
-(void)
+(ModuleTest)
 <b>run</b><span>(count = 1)</span>
       <br>
     </p>
@@ -576,6 +494,33 @@
       </span>
       &mdash;
       <span class='desc'><strong>Optional</strong> the number of times to run the tests.  Defaults to <code>1</code>. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      <tt><a href='../class/ModuleTest.html'>ModuleTest</a></tt>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='chrome-dynamic'>
+      #
+(ModuleTest)
+<b>chrome</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Starts the testing server running via a Chrome browser for manual debugging.</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      <tt><a href='../class/ModuleTest.html'>ModuleTest</a></tt>
     </li>
   </ul>
 </div>
