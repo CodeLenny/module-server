@@ -18,14 +18,17 @@ Provides request.js locations for each module loaded via ModuleServer.
     SubModule
 ###
 class ModuleConfig
+
   # @property [Function] A function to call once the module configuration has been fully initialized.
   cb: null
+
   # @param [Function] cb A callback to run after the configuration has been initialized.
   constructor: (@cb) ->
     @fetchModules (modules) =>
       @parseModules modules, (config) =>
         @setConfig config, =>
           @cb()
+
   ###
   Fetches the module information from ModuleServer's output at /modules/.
   @param [Function] cb A callback to give the returned JSON.
@@ -33,6 +36,7 @@ class ModuleConfig
   fetchModules: (cb) ->
     $.getJSON "/modules/", (data) =>
       cb data
+
   ###
   Parses the raw data from /modules/ (created by ModuleServer) into a format usable by Require.js
   @param [Object] modules The ModuleServer output
@@ -59,6 +63,7 @@ class ModuleConfig
         public: "/module/#{name}/"
         blade: "/module/#{name}/blade/views/"
     cb config
+
   setConfig: (config, cb) ->
     requirejs.config config
     cb()

@@ -83,8 +83,9 @@ data to the tests.  <code>emit</code> takes a handler (discussed below), followe
 parameters to send to the client.</p><pre><code class="lang-js">TestResponse.emit(&quot;divCount&quot;, $(&quot;#module-target&quot;).length);
 TestResponse.emit(&quot;module&quot;, typeof MyModule, typeof MyModule.INIT);
 </code></pre>
-<h3 id="test-definition-suggested-">Test Definition (<strong>Suggested</strong>)</h3><p>Test data generated from your module client side via
-<a href="../class/ModuleTest.html#onit-dynamic">test.onit()</a>, which defines a Mocha <code>it</code> block.</p><p>Provide a name to call the <code>it</code> block by, a URL segment (handler) to identify client side
+<h3 id="test-definition-suggested-">Test Definition (<strong>Suggested</strong>)</h3><p>Two syntaxes for test definitions are available:
+<a href="../class/ModuleTest.html#onit-dynamic">test.onit()</a> and
+<a href="../class/ModuleTest.html#on-dynamic">test.on().it()</a>.</p><p>Both test data that is generated from the client side and sent via a <code>TestResponse.emit</code>.</p><h4 id="via-onit-">Via onit()</h4><p>Provide a name to call the <code>it</code> block by, a URL segment (handler) to identify client side
 data by, an optional timeout, and a callback to run testing with.</p><p>Each <code>onit</code> definition needs one and only one <code>emit</code> from the client side.
 After the first value to <code>emit</code>, all subsequent values <code>emit</code>ed to the same handler are ignored.</p><pre><code class="lang-js">test.onit(&quot;has one target div&quot;, &quot;divCount&quot;, function(count) {
   count.should.equal(1);
@@ -94,6 +95,21 @@ After the first value to <code>emit</code>, all subsequent values <code>emit</co
   MyModule.should.equal &quot;function&quot;
   should.exist INIT
   INIT.should.equal &quot;function&quot;
+</code></pre>
+<h4 id="via-on-it-">Via on().it()</h4><p>Provide a handler to listen to via <a href="../class/ModuleTest.html#on-dynamic">test.on()</a>, then
+define the test to run after receiving data to that handler, giving it the name to call
+a Mocha <code>it</code> block, an optional timeout, and a callback function.</p><pre><code class="lang-js">test
+  .on(&quot;divCount&quot;)
+  .it(&quot;has one target div&quot;, function(count) {
+    count.should.equal(1);
+  })
+  .on(&quot;module&quot;)
+  .it(&quot;loads MyModule&quot;, 50000, function(MyModule, INIT) {
+    should.exist(MyModule);
+    should.exist(INIT);
+    MyModule.should.equal(&quot;function&quot;);
+    INIT.should.equal(&quot;function&quot;);
+  })
 </code></pre>
 <h3 id="runs-required-">Runs (<strong>Required</strong>)</h3><p>Once all test definitions and responses have been written,
 call <a href="../class/ModuleTest.html#run-dynamic">test.run()</a> to run the test.</p><p>Run takes an optional integer to define the number of times the test should be executed,

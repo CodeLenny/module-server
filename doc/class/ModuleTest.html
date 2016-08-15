@@ -173,6 +173,18 @@
   </li>
   <li>
     <span class='signature'>
+      <a href='#on-dynamic'>
+        #
+(ModuleTest)
+<b>on</b><span>(handler)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Listens to a handler. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
       <a href='#run-dynamic'>
         #
 (ModuleTest)
@@ -461,6 +473,46 @@
       </span>
       &mdash;
       <span class='desc'>called with the data given to <code>TestResponse.emit</code>, to provide chai testing. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      <tt><a href='../class/ModuleTest.html'>ModuleTest</a></tt>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='on-dynamic'>
+      #
+(ModuleTest)
+<b>on</b><span>(handler)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Listens to a handler.  Returns an object containing a method to define tests.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Define a test
+    </h4>
+    <pre><code class='coffeescript'>test
+  .on(&quot;divCount&quot;)
+  .it &quot;has 10 divs&quot;, 5000, (divCount) -&gt; divCount.should.equal 10</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>Handler</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
     </li>
   </ul>
   <h3>Returns:</h3>

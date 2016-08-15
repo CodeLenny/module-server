@@ -110,8 +110,13 @@ TestResponse.emit("module", typeof MyModule, typeof MyModule.INIT);
 
 ### Test Definition (**Suggested**)
 
-Test data generated from your module client side via
-[test.onit()](../class/ModuleTest.html#onit-dynamic), which defines a Mocha `it` block.
+Two syntaxes for test definitions are available:
+[test.onit()](../class/ModuleTest.html#onit-dynamic) and
+[test.on().it()](../class/ModuleTest.html#on-dynamic).
+
+Both test data that is generated from the client side and sent via a `TestResponse.emit`.
+
+#### Via onit()
 
 Provide a name to call the `it` block by, a URL segment (handler) to identify client side
 data by, an optional timeout, and a callback to run testing with.
@@ -133,6 +138,27 @@ test.onit "loads MyModule", "module", 50000, (MyModule, INIT) ->
   MyModule.should.equal "function"
   should.exist INIT
   INIT.should.equal "function"
+```
+
+#### Via on().it()
+
+Provide a handler to listen to via [test.on()](../class/ModuleTest.html#on-dynamic), then
+define the test to run after receiving data to that handler, giving it the name to call
+a Mocha `it` block, an optional timeout, and a callback function.
+
+```js
+test
+  .on("divCount")
+  .it("has one target div", function(count) {
+    count.should.equal(1);
+  })
+  .on("module")
+  .it("loads MyModule", 50000, function(MyModule, INIT) {
+    should.exist(MyModule);
+    should.exist(INIT);
+    MyModule.should.equal("function");
+    INIT.should.equal("function");
+  })
 ```
 
 ### Runs (**Required**)

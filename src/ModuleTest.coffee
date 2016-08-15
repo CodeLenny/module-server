@@ -153,6 +153,21 @@ class ModuleTest
     @
 
   ###
+  Listens to a handler.  Returns an object containing a method to define tests.
+  @param {String} Handler
+  @return {ModuleTest}
+  @example Define a test
+    test
+      .on("divCount")
+      .it "has 10 divs", 5000, (divCount) -> divCount.should.equal 10
+  ###
+  on: (handler) ->
+    res = {}
+    res.it = (name, timeout, cb) =>
+      @onit name, handler, timeout, cb
+      return @
+
+  ###
   Starts a [Phantom](https://github.com/amir20/phantomjs-node) browser, and visits the index
   page at the server given.
   @param {Integer} port the port a server is listening on
@@ -258,6 +273,7 @@ class ModuleTest
             for _it in @_it
               _it router, onStart
     @
+
   ###
   Starts the testing server running via a Chrome browser for manual debugging.
   @return {ModuleTest}
