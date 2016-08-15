@@ -67,3 +67,4 @@ task 'test', 'Run tests against ModuleServer', (opts) ->
       console.log "Mocha ran successfully!"
     .error (code) ->
       console.log "Mocha failed with code #{code}"
+      process.exit code
