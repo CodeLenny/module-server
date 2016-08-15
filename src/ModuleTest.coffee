@@ -251,6 +251,7 @@ class ModuleTest
     for i in [1..count]
       do (i, count) =>
         getPort (port) =>
+          [phantomInstance, phantomPage] = []
           name = if count is 1 then @describeName else "#{@describeName} (run #{i}/#{count})"
           describe name, =>
             router = express()
