@@ -1,0 +1,11 @@
+{
+  "name": "test-moduletest",
+  "version": "0.0.0",
+  "description": "Tests ModuleServer.ModuleTest",
+  "main": "coffee/ModuleTestTest.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ryan Leonard (http://ryanleonard.us)",
+  "license": "MIT"
+}

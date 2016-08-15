@@ -4,7 +4,8 @@
   "description": "Serves client modules.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cake test",
+    "extensive-test": "cake test --extensive"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,27 @@
   "bugs": {
     "url": "https://github.com/CodeLenny/module-server/issues"
   },
-  "homepage": "https://github.com/CodeLenny/module-server#readme"
+  "homepage": "https://github.com/CodeLenny/module-server#readme",
+  "devDependencies": {
+    "@codelenny/module-server-examples": "0.0.2",
+    "bin-path": "0.0.3",
+    "bluebird": "^3.4.1",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "child-process-promise": "^2.0.3",
+    "codo": "^2.1.2",
+    "mocha": "^3.0.2",
+    "path-to-regexp": "^1.5.3",
+    "which": "^1.2.10"
+  },
+  "dependencies": {
+    "blade": "^3.3.0",
+    "body-parser": "^1.15.2",
+    "coffee-middleware": "^0.3.0",
+    "coffee-script": "^1.10.0",
+    "express": "^4.14.0",
+    "jquery": "^3.1.0",
+    "phantom": "^2.1.15",
+    "requirejs": "^2.2.0"
+  }
 }
