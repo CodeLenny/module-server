@@ -16,6 +16,10 @@
   "bugs": {
     "url": "https://github.com/CodeLenny/module-server/issues"
   },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/",
+    "access": "public"
+  },
   "homepage": "https://github.com/CodeLenny/module-server#readme",
   "devDependencies": {
     "@codelenny/module-server-examples": "0.0.2",
