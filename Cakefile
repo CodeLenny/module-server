@@ -1,5 +1,7 @@
 Promise = require "bluebird"
 
+fs = Promise.promisifyAll require "fs-extra"
+
 binPath = require("bin-path")(require)
 path = require "path"
 
@@ -39,12 +41,15 @@ promisifySpawn = (spawned) ->
 build = (opts) ->
   Promise.resolve exec "$(npm bin)/coffee --bare --map --compile --output lib/ src/"
 
-task 'docs', 'Build documentation', (opts) ->
+docs = (opts) ->
   Promise
     .resolve exec "$(npm bin)/codo --name 'ModuleServer' --title 'ModuleServer Documentation' --readme README.md ./src test-response/coffee/* - ModuleTest.md"
     .then (res) ->
       console.log res.stderr
       console.log res.stdout
+
+task 'docs', 'Build documentation', (opts) ->
+  docs opts
     .error (err) ->
       console.log "Error while creating docs: #{err}"
 
@@ -68,3 +73,19 @@ task 'test', 'Run tests against ModuleServer', (opts) ->
     .error (code) ->
       console.log "Mocha failed with code #{code}"
       process.exit code
+
+task 'gh-pages', "Build Github Pages", (opts) ->
+  exec "cd _gh-pages; git status --porcelain --untracked-files=no"
+    .then (res) ->
+      if (res.stderr and res.stderr isnt "") or (res.stdout and res.stdout isnt "")
+        throw new Error "gh-pages directory not clean"
+    .then -> docs opts
+    .then ->
+      fs.copyAsync "doc", "_gh-pages/doc"
+    .then ->
+      Promise.resolve exec "cd _gh-pages; git add .; git commit -m 'Added documentation.'; git push origin gh-pages"
+    .then ({stderr, stdout}) ->
+      console.log stderr if stderr
+      console.log stdout if stdout
+    .catch (err) ->
+      console.log "Error: #{err}"
