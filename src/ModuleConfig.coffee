@@ -48,6 +48,7 @@ class ModuleConfig
       shim:
         "socket.io": {exports: "io"}
         "blade": {exports: "blade"}
+        "blade-liveui": {deps: ["blade"], exports: "blade"}
       paths:
         blade: "/blade/blade"
         jquery: "/jquery.js"
