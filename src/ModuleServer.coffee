@@ -62,7 +62,7 @@ class ModuleServer
     pkgs = pkg["com.codelenny.client_module"] ? pkg["com.codelenny.client_modules"]
     return if not pkgs
     for name, subpath of pkgs
-      @load name, subpath.replace "$PATH", path
+      @load name, require("path").resolve(path, subpath.replace "$PATH", path)
 
   ###
   Add middleware for a given module.
