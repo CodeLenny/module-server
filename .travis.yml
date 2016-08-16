@@ -8,7 +8,6 @@ before_install:
   - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
   - git submodule update --init --recursive
 install:
-  - npm install @codelenny/module-server-examples --registry http://makerchip.com:4873
   - npm install
 script:
   - npm run-script extensive-test
