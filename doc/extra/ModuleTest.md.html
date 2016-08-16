@@ -124,8 +124,9 @@ tab with the same HTML and JavaScript content defined as specified the test.</p>
 Comment out <code>test.run</code> or set the value to 0 to prevent the tests from running
 in the background.</p><pre><code class="lang-js">test.run(0);
 test.chrome();
-</code></pre>
-
+</code></pre><p>By default, <code>test.chrome()</code> will run for 10 seconds.  Pass an alternative timeout (in ms)
+to <code>test.chrome()</code>.  Alternatively, passing <code>0</code> will keep the server alive until the page
+is closed (but will remain online for page reload).</p>
       </div>
     </div>
     <div id='footer'>

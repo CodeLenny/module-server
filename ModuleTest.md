@@ -199,3 +199,7 @@ in the background.
 test.run(0);
 test.chrome();
 ```
+
+By default, `test.chrome()` will run for 10 seconds.  Pass an alternative timeout (in ms)
+to `test.chrome()`.  Alternatively, passing `0` will keep the server alive until the page
+is closed (but will remain online for page reload).
