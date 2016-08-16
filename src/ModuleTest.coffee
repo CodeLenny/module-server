@@ -277,6 +277,7 @@ class ModuleTest
 
   ###
   Starts the testing server running via a Chrome browser for manual debugging.
+  Creates a fake test to keep the server alive.
   @return {ModuleTest}
   ###
   chrome: ->
@@ -288,6 +289,10 @@ class ModuleTest
       moduleServer.load name, path for name, path of @_load
       server = router.listen port
       exec "google-chrome http://localhost:#{port}/"
+      describe "Developer Tools for #{@describeName}", ->
+        it "Opens Developer Tools", (done) ->
+          @timeout 5000
+          setTimeout done, 4500
     @
 
 module.exports = ModuleTest
