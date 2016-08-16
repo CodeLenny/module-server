@@ -48,10 +48,12 @@ class ModuleConfig
       shim:
         "socket.io": {exports: "io"}
         "blade": {exports: "blade"}
-        "blade-liveui": {deps: ["blade"], exports: "blade"}
+        spark: {exports: "Spark"}
+        "blade-liveui": {deps: ["blade", "spark"], exports: "blade"}
       paths:
         blade: "/blade/blade"
         "blade-liveui": "/blade/plugins/liveui"
+        spark: "https://cdn.rawgit.com/devstudio/spark-standalone/master/spark.min"
         jquery: "/jquery.js"
         moment: "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min"
         livestamp: "https://cdn.rawgit.com/mattbradley/livestampjs/develop/livestamp"
