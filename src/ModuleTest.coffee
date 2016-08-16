@@ -243,6 +243,33 @@ class ModuleTest
       """
 
   ###
+  Express route to fetch the [RequireJS](http://requirejs.org/)-based test runner,
+  and listen for the close event at the same time.
+  @param {Express.req} req details about the request
+  @param {Express.res} res our response to the user
+  @private
+  ###
+  _listenCloseTestScript: (req, res) =>
+    if not @_js
+      res.send ""
+      return console.log "No JavaScript!"
+    res.send """
+      define("clienttest", function(require) {
+        #{@_js}
+        $jq = require("jquery");
+        $jq(window).on("unload", function() {
+          $jq.ajaxSetup({async: false});
+          $jq.get("/moduletest/unload/");
+        });
+      });
+      define(["/modules/ModuleConfig.js"], function (ModuleConfig) {
+        new ModuleConfig(function() {
+          require(["clienttest"], function(clienttest) {});
+        });
+      });
+    """
+
+  ###
   Runs the given tests in a [Mocha](https://mochajs.org/) `describe` block the given number of times.
   @param {Integer} count **Optional** the number of times to run the tests.  Defaults to `1`.
   @return {ModuleTest}
@@ -279,22 +306,40 @@ class ModuleTest
   Starts the testing server running via a Chrome browser for manual debugging.
   Creates a fake test to keep the server alive.
   @param {Integer} timeout **Optional** the delay length to ensure that the developer tools
-    have opened, in ms.  Defaults to 10000 ms (10 seconds).
+    have opened, in ms.  If 0, listens for page close instead.  Defaults to 10000 ms (10 seconds).
   @return {ModuleTest}
   ###
   chrome: (timeout=10000)->
     getPort (port) =>
       router = express()
       router.get "/", @_index
-      router.get "/test.js", @_testScript
+      closed = null
+      if timeout is 0
+        closed = new Promise (resolve, reject) =>
+          _timer = null
+          open = (req, res, next) ->
+            clearTimeout _timer
+            next()
+          close = (req, res) ->
+            _timer = setTimeout resolve, 2000
+            res.send ""
+          router.get "/test.js", open, @_listenCloseTestScript
+          router.get "/moduletest/unload/", close
+      else
+        router.get "/test.js", @_testScript
       moduleServer = new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
       moduleServer.load name, path for name, path of @_load
       server = router.listen port
       exec "google-chrome http://localhost:#{port}/"
       describe "Developer Tools for #{@describeName}", ->
         it "Opens Developer Tools", (done) ->
-          @timeout timeout + 500
-          setTimeout done, timeout
+          if timeout is 0
+            @timeout 0
+            closed.then done
+            yes
+          else
+            @timeout timeout + 500
+            setTimeout done, timeout
     @
 
 module.exports = ModuleTest

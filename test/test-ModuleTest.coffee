@@ -41,4 +41,4 @@ outTest
     should.exist output
     output.should.equal "Inserted via jQuery."
   .run (if process.env.FULLTEST then 20 else 2)
-  #.chrome()
+  .chrome(0)
