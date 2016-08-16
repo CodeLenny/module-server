@@ -63,7 +63,7 @@ class ModuleServer
     return if not pkgs
     for name, subpath of pkgs
       subpath = subpath.replace "$PATH", path
-      subpath = require("path").resolve path, subpath if subpath[0] = "."
+      subpath = require("path").resolve path, subpath if subpath[0] is "."
       @load name, subpath
 
   ###
