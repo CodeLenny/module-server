@@ -278,9 +278,11 @@ class ModuleTest
   ###
   Starts the testing server running via a Chrome browser for manual debugging.
   Creates a fake test to keep the server alive.
+  @param {Integer} timeout **Optional** the delay length to ensure that the developer tools
+    have opened, in ms.  Defaults to 10000 ms (10 seconds).
   @return {ModuleTest}
   ###
-  chrome: ->
+  chrome: (timeout=10000)->
     getPort (port) =>
       router = express()
       router.get "/", @_index
@@ -291,8 +293,8 @@ class ModuleTest
       exec "google-chrome http://localhost:#{port}/"
       describe "Developer Tools for #{@describeName}", ->
         it "Opens Developer Tools", (done) ->
-          @timeout 5000
-          setTimeout done, 4500
+          @timeout timeout + 500
+          setTimeout done, timeout
     @
 
 module.exports = ModuleTest
