@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "cake test",
-    "extensive-test": "cake --extensive test"
+    "extensive-test": "cake --extensive test",
+    "preversion": "cake gh-pages",
+    "postversion": "npm publish"
   },
   "repository": {
     "type": "git",
