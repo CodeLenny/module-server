@@ -2,7 +2,7 @@
   "name": "@codelenny/module-server",
   "version": "0.3.7",
   "description": "Serves client modules.",
-  "main": "index.js",
+  "main": "lib/ModuleServer.js",
   "scripts": {
     "test": "cake test",
     "extensive-test": "cake --extensive test",
