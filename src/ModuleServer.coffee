@@ -44,7 +44,15 @@ class ModuleServer
   ###
   load: (name, path) ->
     path = @findPath path
-    pkg = require "#{path}/package.json"
+    pkg = null
+    while pkg is null
+      try
+        pkg = require "#{path}/package.json"
+      catch err
+        updir = require("path").resolve(path, "../")
+        if path is updir
+          throw new Error("Can't find module #{name} at #{path}")
+        path = updir
     main = pkg.main
       .replace(/^coffee\/(.*)\.coffee/, "$1.js")
       .replace(/^public\/(.*)$/, "$1")
