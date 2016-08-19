@@ -22,6 +22,31 @@ describe "ModuleServer", ->
     server.modulePath.should.equal "/module/"
     server.configPath.should.equal "/modules/ModuleConfig.js"
 
+  it "routes absolute paths correctly", ->
+    absolutePath = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"
+    [app, server] = createModuleServer()
+    corrected = server.correctPaths "AbsolutePathsTest",
+      moment: absolutePath
+    corrected.moment = absolutePath
+
+  it "routes paths to public files", ->
+    [app, server] = createModuleServer()
+    corrected = server.correctPaths "PublicPathsTest",
+      helper: "$PUBLIC/helper.js"
+    corrected.helper = "/module/PublicPathsTest/helper.js"
+
+  it "routes paths to CoffeeScript files (with .coffee)", ->
+    [app, server] = createModuleServer()
+    corrected = server.correctPaths "CoffeeScriptPathsTest",
+      helper: "$COFFEE/helper.coffee"
+    corrected.helper = "/module/PublicPathsTest/helper.js"
+
+  it "routes paths to CoffeeScript files (without .coffee)", ->
+    [app, server] = createModuleServer()
+    corrected = server.correctPaths "CoffeeScriptPathsTest",
+      helper: "$COFFEE/helper"
+    corrected.helper = "/module/PublicPathsTest/helper"
+
   it "loads a module from an NPM package", ->
     [app, server] = createModuleServer()
     server.load "Example", "@codelenny/module-server-examples"
