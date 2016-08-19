@@ -113,7 +113,10 @@ class ModuleServer
   ###
   correctPaths: (name, paths) ->
     for script, location of paths
-      paths[script] = location.replace("$PUBLIC", "#{@modulePath}#{name}").replace(/\.js$/, '')
+      paths[script] = location
+        .replace "$PUBLIC", "#{@modulePath}#{name}"
+        .replace /\$COFFEE\/(.*)\.coffee$/, "#{@modulePath}#{name}/$1.js"
+        .replace "$COFFEE", "#{@modulePath}#{name}"
     paths
 
   ###

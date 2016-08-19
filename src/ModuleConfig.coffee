@@ -59,12 +59,14 @@ class ModuleConfig
         livestamp: "https://cdn.rawgit.com/mattbradley/livestampjs/develop/livestamp"
         bluebird: "https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.4.1/bluebird.min"
         "socket.io": "/socket.io/socket.io"
+      map:
+        "*": {}
     for {name, main, paths} in modules
       config.paths[name] = main.replace /^(.*)\.js$/, "$1"
       console.log "## Loaded #{main} as #{name} ##"
       for own subpath, location of paths
         console.log "#{name}/#{subpath} points to #{location}"
-        config.paths["#{name}/#{subpath}"] = location
+        config.map["*"]["#{name}/#{subpath}"] = location
       config.config[name] =
         public: "/module/#{name}/"
         blade: "/module/#{name}/blade/views/"
