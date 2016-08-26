@@ -43,7 +43,7 @@ class ModuleServer
   @param {String} path location of module source files
   ###
   load: (name, path) ->
-    path = @findPath path
+    path = origPath = @findPath path
     pkg = null
     while pkg is null
       try
@@ -51,7 +51,7 @@ class ModuleServer
       catch err
         updir = require("path").resolve(path, "../")
         if path is updir
-          throw new Error("Can't find module #{name} at #{path}")
+          throw new Error("Can't find module #{name}, started at #{origPath}")
         path = updir
     main = pkg.main
       .replace(/^coffee\/(.*)\.coffee/, "$1.js")
