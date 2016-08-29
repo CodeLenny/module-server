@@ -140,7 +140,7 @@ class ModuleTest
     if not cb
       cb = timeout
       timeout = 2000
-    @_it.push (router, started) =>
+    @_it.push (router, started, itStarted) =>
       args = new Promise (resolve, reject) ->
         router.post "/testresponse/#{handler}/", bodyParser.urlencoded({extended: yes}), (req, res) ->
           console.log "Got #{req.body.args}" if ModuleTest.DEBUG
@@ -148,6 +148,7 @@ class ModuleTest
         started()
       it name, ->
         @timeout timeout
+        itStarted @
         args.then (args) ->
           cb args... if cb
     @
@@ -277,29 +278,35 @@ class ModuleTest
   run: (count=1) ->
     for i in [1..count]
       do (i, count) =>
-        getPort (port) =>
+        name = if count is 1 then @describeName else "#{@describeName} (run #{i}/#{count})"
+        describe name, =>
           [phantomInstance, phantomPage] = []
-          name = if count is 1 then @describeName else "#{@describeName} (run #{i}/#{count})"
-          describe name, =>
-            router = express()
-            router.get "/", @_index
-            router.get "/test.js", @_testScript
-            moduleServer = new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
-            moduleServer.load name, path for name, path of @_load
-            ret = no
-            server = router.listen port
-            _started = 0
-            onStart = =>
-              if ++_started is @_it.length
-                @startPhantom port
-                  .then (res) ->
-                    [phantomInstance, phantomPage] = res
-            after =>
-              server.close() if server
-              phantomPage.close() if phantomPage?
-              phantomInstance.exit() if phantomInstance?
-            for _it in @_it
-              _it router, onStart
+          router = express()
+          router.get "/", @_index
+          router.get "/test.js", @_testScript
+          moduleServer = new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
+          moduleServer.load name, path for name, path of @_load
+          ret = no
+          server = null
+          _started = 0
+          _phantomStarted = no
+          onStart = -> ++_started
+          onItStart = (_mocha) =>
+            _mocha.slow 300
+            return if _started isnt @_it.length or _phantomStarted
+            _mocha.slow 1250
+            getPort (port) =>
+              server = router.listen port
+              _phantomStarted = yes
+              @startPhantom port
+                .then (res) ->
+                  [phantomInstance, phantomPage] = res
+          after =>
+            server.close() if server
+            phantomPage.close() if phantomPage?
+            phantomInstance.exit() if phantomInstance?
+          for _it in @_it
+            _it router, onStart, onItStart
     @
 
   ###

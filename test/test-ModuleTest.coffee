@@ -42,3 +42,25 @@ outTest
     output.should.equal "Inserted via jQuery."
   .run (if process.env.FULLTEST then 20 else 2)
   #.chrome(0)
+
+stressTest = new ModuleTest "ModuleTest Stress Testing"
+stressTest
+  .load "ModuleTesting", "#{__dirname}/test-moduletest"
+  .blade "#output"
+  .coffee """
+    require ["jquery", "ModuleTesting", "TestResponse"], ($, ModuleTesting, TestResponse) ->
+      window.mod = new ModuleTesting "#output"
+      x = 0
+      while x < 1000000
+        Math.tan Math.atan Math.tan x
+        x++
+      window.setTimeout (-> TestResponse.emit "250ms", $("#output").text()), 250
+      window.setTimeout (-> TestResponse.emit "800ms", $("#output").text()), 800
+  """
+  .onit "responds in 250ms", "250ms", 5000, (output) ->
+    should.exist output
+    output.should.equal "Inserted via jQuery."
+  .onit "responds in 800ms", "800ms", 5000, (output) ->
+    should.exist output
+    output.should.equal "Inserted via jQuery."
+  .run (if process.env.FULLTEST then 150 else 50)
