@@ -12,7 +12,7 @@ class ModuleServer
   `name` is the client-side module name defined, `main` is a client-side path to the main script,
   and `paths` is an object of `{script: location}` of additional files to serve.
   ###
-  _loadedPackages: []
+  _loadedPackages: null
 
   ###
   @param {Connect} router a [connect framework](https://github.com/senchalabs/connect) instance
@@ -21,6 +21,7 @@ class ModuleServer
     Defaults to `/modules/ModuleConfig.coffee`
   ###
   constructor: (@router, @modulePath="/module/", @configPath="/modules/ModuleConfig.js") ->
+    @_loadedPackages = []
     @list()
     @moduleConfig()
     @blade()
@@ -28,7 +29,7 @@ class ModuleServer
     @jquery()
 
   ###
-  Loads a client module, and serves it under the provided name.
+  Loads a client module, and serves it under the provided name.  Blocks modules from being loaded multiple times.
 
   Valid paths:
 
@@ -43,6 +44,7 @@ class ModuleServer
   @param {String} path location of module source files
   ###
   load: (name, path) ->
+    return for _pkg in @_loadedPackages when name is _pkg.name
     path = origPath = @findPath path
     pkg = null
     while pkg is null
