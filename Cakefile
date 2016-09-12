@@ -93,7 +93,7 @@ task 'gh-pages', "Build Github Pages", (opts) ->
       console.log stderr if stderr
       console.log stdout if stdout
     .then ->
-      exec "git status --porcelain --untracked-files=no --ignore-submodules=dirty"
+      exec "git status --porcelain --untracked-files=no --ignore-submodules"
     .then (res) ->
       if (res.stderr and res.stderr isnt "") or (res.stdout and res.stdout isnt "")
         throw new Error "gh-pages directory not clean"
