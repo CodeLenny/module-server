@@ -1,4 +1,4 @@
 [submodule "_gh-pages"]
 	path = _gh-pages
-	url = git@github.com:codelenny/module-server.git
+	url = https://github.com/CodeLenny/module-server.git
 	branch = gh-pages
