@@ -63,4 +63,4 @@ stressTest
   .onit "responds in 800ms", "800ms", 5000, (output) ->
     should.exist output
     output.should.equal "Inserted via jQuery."
-  .run (if process.env.FULLTEST then 150 else 50)
+  .run (if process.env.FULLTEST then 150 else 5)
