@@ -333,7 +333,7 @@ class ModuleTest
     getPort (port) =>
       router = if @_server then @_server() else express()
       [router, moduleServer] = router if Array.isArray router
-      router.get "/", @_index
+      router.get "/codelenny-module-server/", @_index
       closed = null
       if timeout is 0
         closed = new Promise (resolve, reject) =>
@@ -347,7 +347,7 @@ class ModuleTest
           router.get "/codelenny-module-server/test.js", open, @_listenCloseTestScript
           router.get "/moduletest/unload/", close
       else
-        router.get "/test.js", @_testScript
+        router.get "/codelenny-module-server/test.js", @_testScript
       moduleServer ?= new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
       moduleServer.load name, path for name, path of @_load
       server = router.listen port
