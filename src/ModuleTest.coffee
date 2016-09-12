@@ -81,7 +81,8 @@ class ModuleTest
 
   ###
   Allows a custom Connect server to be used.  Must not be assigned a port.
-  @property {Function<Connect>} _server a function to generate a new Connect server
+  @property {Function<Connect>} _server a function to generate a new Connect server.  Can optionally return an array
+    with both `Connect` and an existing `ModuleServer`.
   ###
   server: (@_server) -> @
 
@@ -293,9 +294,10 @@ class ModuleTest
         describe name, =>
           [phantomInstance, phantomPage] = []
           router = if @_server then @_server() else express()
+          [router, moduleServer] = router if Array.isArray router
           router.get "/codelenny-module-server/", @_index
           router.get "/codelenny-module-server/test.js", @_testScript
-          moduleServer = new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
+          moduleServer ?= new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
           moduleServer.load name, path for name, path of @_load
           ret = no
           server = null
