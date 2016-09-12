@@ -331,7 +331,8 @@ class ModuleTest
   ###
   chrome: (timeout=10000)->
     getPort (port) =>
-      router = express()
+      router = if @_server then @_server() else express()
+      [router, moduleServer] = router if Array.isArray router
       router.get "/", @_index
       closed = null
       if timeout is 0
@@ -347,7 +348,7 @@ class ModuleTest
           router.get "/moduletest/unload/", close
       else
         router.get "/test.js", @_testScript
-      moduleServer = new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
+      moduleServer ?= new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
       moduleServer.load name, path for name, path of @_load
       server = router.listen port
       exec "google-chrome http://localhost:#{port}/codelenny-module-server/"
