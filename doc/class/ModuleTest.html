@@ -96,9 +96,32 @@
         <dd class='desc'>
           module <code>name: path</code> to load via ModuleServer. 
         </dd>
+        <dt id='_server-property'>
+          <span class='signature'>
+            (Function&lt;Connect&gt;)
+            <b>
+              _server
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          a function that returns a <a href="http://senchalabs.github.com/connect">Connect</a> server. 
+        </dd>
       </dl>
       <h2>Instance Method Summary</h2>
       <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#server-dynamic'>
+        #
+(void)
+<b>server</b><span>(_server)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Allows a custom Connect server to be used. 
+    </span>
+  </li>
   <li>
     <span class='signature'>
       <a href='#load-dynamic'>
@@ -240,6 +263,20 @@
 </div>
       <h2>Instance Method Details</h2>
       <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='server-dynamic'>
+      #
+(void)
+<b>server</b><span>(_server)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Allows a custom Connect server to be used.  Must not be assigned a port.
+_server a function to generate a new Connect server.  Can optionally return an array with both <code>Connect</code> and an existing <code>ModuleServer</code>.</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
   <div class='method_details'>
     <p class='signature' id='load-dynamic'>
       #
