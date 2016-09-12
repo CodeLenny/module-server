@@ -65,6 +65,11 @@ class ModuleTest
   _load: null
 
   ###
+  @property {Function<Connect>} a function that returns a [Connect](http://senchalabs.github.com/connect) server.
+  ###
+  _server: null
+
+  ###
   Initializes a new testing environment for a series of tests (`it` blocks) inside a single
   `describe` block.
   @param {String} describeName a name to use for the `describe` block.
@@ -73,6 +78,12 @@ class ModuleTest
     @_load =
       TestResponse: "#{__dirname}/../test-response/"
     @_it = []
+
+  ###
+  Allows a custom Connect server to be used.  Must not be assigned a port.
+  @property {Function<Connect>} _server a function to generate a new Connect server
+  ###
+  server: (@_server) -> @
 
   ###
   Passes load arguments to ModuleServer.
@@ -189,7 +200,7 @@ class ModuleTest
           console.log "Page experienced error: #{msg}" if ModuleTest.DEBUG
         page.property 'onConsoleMessage', (msg) ->
           console.log "Page logged: #{msg}" if ModuleTest.DEBUG
-        page.open "http://localhost:#{port}/"
+        page.open "http://localhost:#{port}/codelenny-module-server/"
       .then (content) ->
         console.log content if ModuleTest.DEBUG
       .catch (err) ->
@@ -215,7 +226,7 @@ class ModuleTest
           <html>
             <body>
               #{body}
-              <script data-main="/test.js" src="/requirejs/"></script>
+              <script data-main="/codelenny-module-server/test.js" src="/requirejs/"></script>
             </body>
           </html>
         """
@@ -281,9 +292,9 @@ class ModuleTest
         name = if count is 1 then @describeName else "#{@describeName} (run #{i}/#{count})"
         describe name, =>
           [phantomInstance, phantomPage] = []
-          router = express()
-          router.get "/", @_index
-          router.get "/test.js", @_testScript
+          router = if @_server then @_server() else express()
+          router.get "/codelenny-module-server/", @_index
+          router.get "/codelenny-module-server/test.js", @_testScript
           moduleServer = new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
           moduleServer.load name, path for name, path of @_load
           ret = no
@@ -330,14 +341,14 @@ class ModuleTest
           close = (req, res) ->
             _timer = setTimeout resolve, 2000
             res.send ""
-          router.get "/test.js", open, @_listenCloseTestScript
+          router.get "/codelenny-module-server/test.js", open, @_listenCloseTestScript
           router.get "/moduletest/unload/", close
       else
         router.get "/test.js", @_testScript
       moduleServer = new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
       moduleServer.load name, path for name, path of @_load
       server = router.listen port
-      exec "google-chrome http://localhost:#{port}/"
+      exec "google-chrome http://localhost:#{port}/codelenny-module-server/"
       describe "Developer Tools for #{@describeName}", ->
         it "Opens Developer Tools", (done) ->
           if timeout is 0
