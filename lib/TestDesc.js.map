@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "TestDesc.js",
+  "sourceRoot": "..",
+  "sources": [
+    "src/TestDesc.coffee"
+  ],
+  "names": [],
+  "mappings": ";;AAAA;;;AAAA,IAAA;;AAGM;;AAEJ;;;;;;EAMa,kBAAC,IAAD,EAAQ,OAAR,EAAkB,OAAlB,EAA4B,EAA5B;IAAC,IAAC,CAAA,OAAD;IAAO,IAAC,CAAA,UAAD;IAAU,IAAC,CAAA,UAAD;IAAU,IAAC,CAAA,KAAD;EAA5B;;;;;;AAEf,MAAM,CAAC,OAAP,GAAiB"
+}

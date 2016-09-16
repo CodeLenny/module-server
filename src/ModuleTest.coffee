@@ -1,3 +1,4 @@
+Promise = require "bluebird"
 net = require "net"
 blade = require "blade"
 coffee = require "coffee-script"
@@ -8,6 +9,9 @@ ModuleServer = require "./ModuleServer"
 {describe, it, before, after} = require "mocha"
 {exec} = require "child_process"
 
+TestDesc = require "./TestDesc"
+TestRun = require "./TestRun"
+
 ###
 Picks random high ports in (hopefully) free teritory.
 @param {Integer} min **Optional** the smalllest port to choose.  Defaults to `49152`.
@@ -15,21 +19,23 @@ Picks random high ports in (hopefully) free teritory.
 @param {Function} cb Called with the free port.
 ###
 getPort = (min=49152, max=65535, cb) ->
-  if typeof max is "function"
-    cb = max
-    max = 65525
-  if typeof min is "function"
-    cb = min
-    min = 49152
-  port = Math.floor(Math.random() * (max - min + 1)) + min
-  server = net.createServer()
-  server.once 'error', (err) ->
-    console.log "Port #{port} taken.  Retrying."
-    getPort min, max, cb
-  server.once 'listening', ->
-    server.close()
-    cb port if cb
-  server.listen port
+  new Promise (resolve, reject) ->
+    if typeof max is "function"
+      cb = max
+      max = 65525
+    if typeof min is "function"
+      cb = min
+      min = 49152
+    port = Math.floor(Math.random() * (max - min + 1)) + min
+    server = net.createServer()
+    server.once 'error', (err) ->
+      console.log "Port #{port} taken.  Retrying."
+      getPort min, max, cb
+    server.once 'listening', ->
+      server.close()
+      cb port if cb
+      resolve port
+    server.listen port
 
 ###
 Sets up a [Mocha](https://mochajs.org/) testing environment for server-side components.
@@ -54,10 +60,10 @@ class ModuleTest
   _body: null
 
   ###
-  @property {Array<Function>} functions that will create an `it` test run.
+  @property {Array<TestDesc>} tests to run
   @private
   ###
-  _it: null
+  _tests: null
 
   ###
   @property {Object<String, String>} module `name: path` to load via ModuleServer.
@@ -77,7 +83,7 @@ class ModuleTest
   constructor: (@describeName) ->
     @_load =
       TestResponse: "#{__dirname}/../test-response/"
-    @_it = []
+    @_tests = []
 
   ###
   Allows a custom Connect server to be used.  Must not be assigned a port.
@@ -149,20 +155,7 @@ class ModuleTest
   @return {ModuleTest}
   ###
   onit: (name, handler, timeout, cb) ->
-    if not cb
-      cb = timeout
-      timeout = 2000
-    @_it.push (router, started, itStarted) =>
-      args = new Promise (resolve, reject) ->
-        router.post "/testresponse/#{handler}/", bodyParser.urlencoded({extended: yes}), (req, res) ->
-          console.log "Got #{req.body.args}" if ModuleTest.DEBUG
-          resolve req.body.args
-        started()
-      it name, ->
-        @timeout timeout
-        itStarted @
-        args.then (args) ->
-          cb args... if cb
+    @_tests.push new TestDesc name, handler, timeout, cb
     @
 
   ###
@@ -283,6 +276,19 @@ class ModuleTest
     """
 
   ###
+  Creates a [Connect](http://senchalabs.github.com/connect) server, using {ModuleTest#_server} if avalible, otherwise
+  creating a new Express server.  Provides basic routing for tests, and loads the required modules.
+  ###
+  _createServer: ->
+    router = if @_server then @_server() else express()
+    [router, moduleServer] = router if Array.isArray router
+    router.get "/codelenny-module-server/", @_index
+    router.get "/codelenny-module-server/test.js", @_testScript
+    moduleServer ?= new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
+    moduleServer.load name, path for name, path of @_load
+    router
+
+  ###
   Runs the given tests in a [Mocha](https://mochajs.org/) `describe` block the given number of times.
   @param {Integer} count **Optional** the number of times to run the tests.  Defaults to `1`.
   @return {ModuleTest}
@@ -292,34 +298,43 @@ class ModuleTest
       do (i, count) =>
         name = if count is 1 then @describeName else "#{@describeName} (run #{i}/#{count})"
         describe name, =>
-          [phantomInstance, phantomPage] = []
-          router = if @_server then @_server() else express()
-          [router, moduleServer] = router if Array.isArray router
-          router.get "/codelenny-module-server/", @_index
-          router.get "/codelenny-module-server/test.js", @_testScript
-          moduleServer ?= new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
-          moduleServer.load name, path for name, path of @_load
-          ret = no
-          server = null
-          _started = 0
-          _phantomStarted = no
-          onStart = -> ++_started
-          onItStart = (_mocha) =>
-            _mocha.slow 300
-            return if _started isnt @_it.length or _phantomStarted
-            _mocha.slow 1250
-            getPort (port) =>
+          [server, phantomInstance, phantomPage] = []
+          tests = (new TestRun test for test in @_tests)
+
+          started = (test.started for test in tests)
+          done = (test.done for test in tests)
+
+          # Once a single `it` block has started to execute, start the server and a Phantom instance
+          Promise
+            .any started
+            .then (test) ->
+              # This test will be delayed as we're starting the server, so don't mark the test slow unless it takes
+              # longer than 1.5 seconds.
+              test.timeout test.timeout() + 1500
+              test.slow 1500
+            .then -> getPort()
+            .then (port) =>
+              router = @_createServer()
+              Promise
+                .map tests, (test) -> test.route router
+                .then -> [port, router]
+            .then ([port, router]) =>
               server = router.listen port
-              _phantomStarted = yes
               @startPhantom port
-                .then (res) ->
-                  [phantomInstance, phantomPage] = res
-          after =>
-            server.close() if server
-            phantomPage.close() if phantomPage?
-            phantomInstance.exit() if phantomInstance?
-          for _it in @_it
-            _it router, onStart, onItStart
+            .then (res) ->
+              [phantomInstance, phantomPage] = res
+            .catch (err) ->
+              console.log "Error starting tests for #{name}: #{err}"
+
+          # Once all of the tests have fully finished, tear down the server and Phantom
+          Promise
+            .all done
+            .then =>
+              server.close() if server
+              phantomPage.close() if phantomPage
+              phantomInstance.exit() if phantomInstance
+            .catch (err) ->
+              console.log "Error tearing down after #{name}: #{err}"
     @
 
   ###

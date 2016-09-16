@@ -30,7 +30,7 @@ outTest
       TestResponse.emit "random", 5
       window.setTimeout (-> TestResponse.emit "output", $("#output").text()), 500
   """
-  .onit "sets window.mod", "window.mod", 5000, (modType, is10) ->
+  .onit "sets window.mod", "window.mod", 5000, ([modType, is10]) ->
     should.exist modType
     should.exist is10
     modType.should.equal "object"
