@@ -5,7 +5,6 @@ express = require "express"
 
 ModuleServer = require "../lib/ModuleServer"
 ModuleTest = require "../lib/ModuleTest"
-#ModuleTest = require "../src/ModuleTest"
 #ModuleTest.DEBUG = yes
 
 custom = new ModuleTest "ModuleTest Custom Connect Server Testing"

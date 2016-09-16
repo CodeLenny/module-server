@@ -2,8 +2,7 @@ chai = require "chai"
 should = chai.should()
 
 ModuleTest = require "../lib/ModuleTest"
-#ModuleTest = require "../src/ModuleTest"
-ModuleTest.DEBUG = no
+#ModuleTest.DEBUG = yes
 
 simple = new ModuleTest "Simple Test of ModuleTest"
 simple
