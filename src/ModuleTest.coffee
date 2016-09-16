@@ -76,6 +76,16 @@ class ModuleTest
   _server: null
 
   ###
+  @property {Boolean} `true` to only run this test.
+  ###
+  _only: null
+
+  ###
+  @property {Boolean} `true` to skip this test.
+  ###
+  _skip: null
+
+  ###
   Initializes a new testing environment for a series of tests (`it` blocks) inside a single
   `describe` block.
   @param {String} describeName a name to use for the `describe` block.
@@ -172,6 +182,22 @@ class ModuleTest
     res.it = (name, timeout, cb) =>
       @onit name, handler, timeout, cb
       return @
+
+  ###
+  Only run this ModuleTest.  Uses `describe.only(...)` in Mocha.
+  @return {ModuleTest}
+  ###
+  only: ->
+    @_only = yes
+    @
+
+  ###
+  Skip this ModuleTest.  Uses `describe.skip(...)` in Mocha.
+  @return {ModuleTest}
+  ###
+  skip: ->
+    @_skip = yes
+    @
 
   ###
   Starts a [Phantom](https://github.com/amir20/phantomjs-node) browser, and visits the index
@@ -297,7 +323,12 @@ class ModuleTest
     for i in [1..count]
       do (i, count) =>
         name = if count is 1 then @describeName else "#{@describeName} (run #{i}/#{count})"
-        describe name, =>
+        runner = describe
+        if @_only
+          runner = describe.only
+        else if @_skip
+          runner = describe.skip
+        runner name, =>
           [server, phantomInstance, phantomPage] = []
           tests = (new TestRun test for test in @_tests)
 
