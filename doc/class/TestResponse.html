@@ -53,6 +53,30 @@
       Sends data to respond to a test. 
     </span>
   </li>
+  <li>
+    <span class='signature'>
+      <a href='#delayUntil-static'>
+        .
+(Promise)
+<b>delayUntil</b><span>(poll = 25, test)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Delays until some test is true. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#time-static'>
+        ~
+(Promise&lt;Number&gt;)
+<b>time</b><span>(namespace, poll, fn)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Times the duration until a function returns <code>true</code>. 
+    </span>
+  </li>
 </ul>
       <h2>Class Method Details</h2>
       <div class='methods'>
@@ -90,6 +114,181 @@
       <span class='desc'>data to pass </span>
     </li>
   </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='delayUntil-static'>
+      .
+(Promise)
+<b>delayUntil</b><span>(poll = 25, test)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Delays until some test is true.  Currently uses polling.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>poll</span>
+      <span class='type'>
+        (
+          <tt>Integer</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'><strong>Optional</strong> how often the test should be checked, in milliseconds.  Defaults to <code>25</code>ms. </span>
+    </li>
+    <li>
+      <span class='name'>test</span>
+      <span class='type'>
+        (
+          <tt>Function&lt;Boolean&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>function to determine if progress should continue.  Resolves the promise as soon as the test returns <code>true</code>. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Promise</tt>
+      )
+      &mdash;
+      <span class='desc'>Resolves after the test returns <code>true</code>. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='time-static'>
+      ~
+(Promise&lt;Number&gt;)
+<b>time</b><span>(namespace, poll, fn)</span>
+      <br>
+      ~
+(Promise&lt;Number&gt;)
+<b>time</b><span>(poll, fn)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Times the duration until a function returns <code>true</code>.</p>
+</div>
+<div class='tags'>
+  <div class='overloads'>
+    <h3>Overloads:</h3>
+    <div class='overload'>
+      <p class='signature'>
+        ~
+(Promise&lt;Number&gt;)
+<b>time</b><span>(namespace, poll, fn)</span>
+      </p>
+      <div class='docstring'>
+  <p>Emits the duration (in ms) it took until <code>fn</code> returned <code>true</code> at the given namespace.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>namespace</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the event to emit data to </span>
+    </li>
+    <li>
+      <span class='name'>poll</span>
+      <span class='type'>
+        (
+          <tt>Integer</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'><strong>Optional</strong> how often the test should be checked, in milliseconds.  Defaults to <code>25</code>ms. </span>
+    </li>
+    <li>
+      <span class='name'>fn</span>
+      <span class='type'>
+        (
+          <tt>Function&lt;Boolean&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the function to test until it returns true </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Promise&lt;Number&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>the duration (in ms) it took until <code>fn</code> returned true </span>
+    </li>
+  </ul>
+  <h3>See also:</h3>
+  <ul class='see'>
+    <li>
+      <a href='../class/TestResponse.html#emit-static'>TestResponse.emit</a>
+    </li>
+  </ul>
+</div>
+    </div>
+    <div class='overload'>
+      <p class='signature'>
+        ~
+(Promise&lt;Number&gt;)
+<b>time</b><span>(poll, fn)</span>
+      </p>
+      <div class='docstring'>
+  <p>Returns a promise that resolves with the duration it took until <code>fn</code> returned <code>true</code>.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>poll</span>
+      <span class='type'>
+        (
+          <tt>Integer</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'><strong>Optional</strong> how often the test should be checked, in milliseconds.  Defaults to <code>25</code>ms. </span>
+    </li>
+    <li>
+      <span class='name'>fn</span>
+      <span class='type'>
+        (
+          <tt>Function&lt;Boolean&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the function to test until it returns true </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Promise&lt;Number&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>the duration (in ms) it took until <code>fn</code> returned true </span>
+    </li>
+  </ul>
+</div>
+    </div>
+  </div>
 </div>
   </div>
 </div>
