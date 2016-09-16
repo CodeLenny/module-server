@@ -74,16 +74,16 @@
         <dd class='desc'>
           elements inside the body of the testing webpage 
         </dd>
-        <dt id='_it-property'>
+        <dt id='_tests-property'>
           <span class='signature'>
-            (Array&lt;Function&gt;)
+            (Array&lt;TestDesc&gt;)
             <b>
-              _it
+              _tests
             </b>
           </span>
         </dt>
         <dd class='desc'>
-          functions that will create an <code>it</code> test run. 
+          tests to run 
         </dd>
         <dt id='_load-property'>
           <span class='signature'>
@@ -106,6 +106,28 @@
         </dt>
         <dd class='desc'>
           a function that returns a <a href="http://senchalabs.github.com/connect">Connect</a> server. 
+        </dd>
+        <dt id='_only-property'>
+          <span class='signature'>
+            (Boolean)
+            <b>
+              _only
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          <code>true</code> to only run this test. 
+        </dd>
+        <dt id='_skip-property'>
+          <span class='signature'>
+            (Boolean)
+            <b>
+              _skip
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          <code>true</code> to skip this test. 
         </dd>
       </dl>
       <h2>Instance Method Summary</h2>
@@ -204,6 +226,43 @@
     </span>
     <span class='desc'>
       Listens to a handler. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#only-dynamic'>
+        #
+(ModuleTest)
+<b>only</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Only run this ModuleTest. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#skip-dynamic'>
+        #
+(ModuleTest)
+<b>skip</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Skip this ModuleTest. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_createServer-dynamic'>
+        #
+(void)
+<b>_createServer</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Creates a <a href="http://senchalabs.github.com/connect">Connect</a> server, using {ModuleTest#_server} if avalible, otherwise creating a new Express server.
+
     </span>
   </li>
   <li>
@@ -559,6 +618,60 @@ _server a function to generate a new Connect server.  Can optionally return an a
       <tt><a href='../class/ModuleTest.html'>ModuleTest</a></tt>
     </li>
   </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='only-dynamic'>
+      #
+(ModuleTest)
+<b>only</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Only run this ModuleTest.  Uses <code>describe.only(...)</code> in Mocha.</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      <tt><a href='../class/ModuleTest.html'>ModuleTest</a></tt>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='skip-dynamic'>
+      #
+(ModuleTest)
+<b>skip</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Skip this ModuleTest.  Uses <code>describe.skip(...)</code> in Mocha.</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      <tt><a href='../class/ModuleTest.html'>ModuleTest</a></tt>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_createServer-dynamic'>
+      #
+(void)
+<b>_createServer</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Creates a <a href="http://senchalabs.github.com/connect">Connect</a> server, using {ModuleTest#_server} if avalible, otherwise
+creating a new Express server.  Provides basic routing for tests, and loads the required modules.</p>
+</div>
+<div class='tags'>
 </div>
   </div>
   <div class='method_details'>
