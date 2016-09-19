@@ -47,5 +47,4 @@ time
   .onit "resolves promise", "manual", 5000, (duration) ->
     should.exist duration
     duration.should.be.within 800, 1200
-  .only()
   .run (if process.env.FULLTEST then 10 else 2)

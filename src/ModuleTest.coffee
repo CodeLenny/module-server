@@ -32,9 +32,9 @@ getPort = (min=49152, max=65535, cb) ->
       console.log "Port #{port} taken.  Retrying."
       getPort min, max, cb
     server.once 'listening', ->
-      server.close()
-      cb port if cb
-      resolve port
+      server.close ->
+        cb port if cb
+        resolve port
     server.listen port
 
 ###
@@ -361,11 +361,13 @@ class ModuleTest
           Promise
             .all done
             .then =>
-              server.close() if server
               phantomPage.close() if phantomPage
               phantomInstance.exit() if phantomInstance
+              return unless server
+              new Promise (resolve, reject) -> server.close resolve
             .catch (err) ->
-              console.log "Error tearing down after #{name}: #{err}"
+              console.log "Error tearing down after #{name}"
+              throw err
     @
 
   ###
