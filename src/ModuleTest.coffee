@@ -315,6 +315,19 @@ class ModuleTest
     router
 
   ###
+  Returns the correct `describe`/`describe.only`/`describe.skip` depending on user input.
+  Also allows adding hooks.
+  @return {Mocha.describe}
+  ###
+  _runner: ->
+    runner = describe
+    if @_only
+      runner = describe.only
+    else if @_skip
+      runner = describe.skip
+    runner
+
+  ###
   Runs the given tests in a [Mocha](https://mochajs.org/) `describe` block the given number of times.
   @param {Integer} count **Optional** the number of times to run the tests.  Defaults to `1`.
   @return {ModuleTest}
@@ -323,12 +336,7 @@ class ModuleTest
     for i in [1..count]
       do (i, count) =>
         name = if count is 1 then @describeName else "#{@describeName} (run #{i}/#{count})"
-        runner = describe
-        if @_only
-          runner = describe.only
-        else if @_skip
-          runner = describe.skip
-        runner name, =>
+        @_runner() name, =>
           [server, phantomInstance, phantomPage] = []
           tests = (new TestRun test for test in @_tests)
 
