@@ -1,6 +1,6 @@
 {
   "name": "@codelenny/module-server",
-  "version": "0.3.21",
+  "version": "0.3.22",
   "description": "Serves client modules.",
   "main": "lib/ModuleServer.js",
   "scripts": {
