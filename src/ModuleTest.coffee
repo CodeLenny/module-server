@@ -86,6 +86,16 @@ class ModuleTest
   _skip: null
 
   ###
+  @property {PhantomJS.Instance} A pointer to the PhantomJS instance.
+  ###
+  _phantomInstance: null
+
+  ###
+  @property {PhantomJS.Page} A pointer to the PhantomJS page.
+  ###
+  _phantomPage: null
+
+  ###
   Initializes a new testing environment for a series of tests (`it` blocks) inside a single
   `describe` block.
   @param {String} describeName a name to use for the `describe` block.
@@ -362,6 +372,8 @@ class ModuleTest
               @startPhantom port
             .then (res) ->
               [phantomInstance, phantomPage] = res
+              @_phantomInstance = phantomInstance
+              @_phantomPage = phantomPage
             .catch (err) ->
               console.log "Error starting tests for #{name}: #{err}"
 
