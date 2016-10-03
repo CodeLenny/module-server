@@ -351,7 +351,7 @@ class ModuleTest
           tests = (new TestRun test for test in @_tests)
 
           started = (test.started for test in tests)
-          done = (test.done for test in tests)
+          done = (test.done.reflect() for test in tests)
 
           # Once a single `it` block has started to execute, start the server and a Phantom instance
           Promise
