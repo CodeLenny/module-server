@@ -370,7 +370,7 @@ class ModuleTest
             .then ([port, router]) =>
               server = router.listen port
               @startPhantom port
-            .then (res) ->
+            .then (res) =>
               [phantomInstance, phantomPage] = res
               @_phantomInstance = phantomInstance
               @_phantomPage = phantomPage
