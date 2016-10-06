@@ -21,6 +21,7 @@ class ModuleServer
     Defaults to `/modules/ModuleConfig.coffee`
   ###
   constructor: (@router, @modulePath="/module/", @configPath="/modules/ModuleConfig.js") ->
+    @moduleRouter = Express.Router()
     @_loadedPackages = []
     @list()
     @moduleConfig()
@@ -82,9 +83,17 @@ class ModuleServer
   @param {String} path location of module source files
   ###
   middleware: (name, path) ->
-    @router.use "#{@modulePath}#{name}", Express.static "#{path}/public"
-    @router.use "#{@modulePath}#{name}/blade", Blade.middleware "#{path}/blade"
-    @router.use "#{@modulePath}#{name}", Coffee {src: "#{path}/coffee", compress: yes, encodeSrc: no}
+    router = Express.Router()
+    router.use "/blade", Blade.middleware "#{path}/blade"
+    router.use Express.static "#{path}/public"
+    router.use Coffee {src: "#{path}/coffee", compress: yes, encodeSrc: no}
+    @moduleRouter.use "/#{name}", router
+
+  ###
+  Call after all modules have been added.
+  ###
+  finalize: ->
+    @router.use @modulePath, @moduleRouter
 
   ###
   Modules can define paths to files under package.json that will be provided to RequireJS.

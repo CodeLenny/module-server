@@ -322,6 +322,7 @@ class ModuleTest
     router.get "/codelenny-module-server/test.js", @_testScript
     moduleServer ?= new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
     moduleServer.load name, path for name, path of @_load
+    moduleServer.finalize()
     router
 
   ###
@@ -368,6 +369,18 @@ class ModuleTest
                 .map tests, (test) -> test.route router
                 .then -> [port, router]
             .then ([port, router]) =>
+              ###
+              log = (stack, indent='') ->
+                for val in stack
+                  if val.route
+                    console.log indent + val.route.path
+                  else if val.regexp
+                    console.log indent + val.regexp
+                  else console.log val
+                  log val.route.stack, "#{indent}  " if val.route?.stack
+                  log val.handle.stack, "#{indent}  " if val.handle?.stack
+              log router._router.stack
+              ###
               server = router.listen port
               @startPhantom port
             .then (res) =>
@@ -418,6 +431,7 @@ class ModuleTest
         router.get "/codelenny-module-server/test.js", @_testScript
       moduleServer ?= new ModuleServer router, "/module/", "/modules/ModuleConfig.js"
       moduleServer.load name, path for name, path of @_load
+      moduleServer.finalize()
       server = router.listen port
       exec "google-chrome http://localhost:#{port}/codelenny-module-server/"
       describe "Developer Tools for #{@describeName}", ->
