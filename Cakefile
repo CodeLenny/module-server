@@ -43,7 +43,7 @@ build = (opts) ->
 
 docs = (opts) ->
   Promise
-    .resolve exec "$(npm bin)/codo --name 'ModuleServer' --title 'ModuleServer Documentation' --readme README.md ./src test-response/coffee/* - ModuleTest.md"
+    .resolve exec "$(npm bin)/codo --name 'ModuleServer' --title 'ModuleServer Documentation' --readme README.md ./src test-response/coffee/* - ModuleTest.md CHANGELOG.md"
     .then (res) ->
       console.log res.stderr
       console.log res.stdout
