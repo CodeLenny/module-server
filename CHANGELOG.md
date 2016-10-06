@@ -1,4 +1,4 @@
-## Unreleased
+## 0.4.0 - 2016-10-06
 
 ### Breaking Changes
 - Using layers of routing (`express.Router`) to increase performance.  To do so,
