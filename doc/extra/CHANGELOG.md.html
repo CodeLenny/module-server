@@ -34,7 +34,21 @@
         </p>
       </nav>
       <div id='filecontents'>
-        <h2 id="0-4-0-2016-10-06">0.4.0 - 2016-10-06</h2>
+        <h2 id="0-4-2-2016-10-23">0.4.2 - 2016-10-23</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li>Added forgotten assets in <a href="#041---2016-10-24">0.4.1</a></li>
+</ul>
+<h2 id="0-4-1-2016-10-24">0.4.1 - 2016-10-24</h2><p><strong>DEPRECIATED</strong> Contains outdated assets.  Use <a href="#042---2016-10-24">0.4.2</a> instead.</p><h3 id="added">Added</h3>
+<ul>
+<li><code>ModuleTest#chrome</code> logs the URL if debug mode is on, in case the window doesn&#39;t automatically open.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>ModuleTest#startPhantom</code> now uses <code>page.on</code> instead of <code>page.property</code> for listening, allowing other scripts to also
+listen.</li>
+</ul>
+<h2 id="0-4-0-2016-10-06">0.4.0 - 2016-10-06</h2>
 <h3 id="breaking-changes">Breaking Changes</h3>
 <ul>
 <li>Using layers of routing (<code>express.Router</code>) to increase performance.  To do so,
