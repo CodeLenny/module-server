@@ -226,9 +226,9 @@ class ModuleTest
         instance.createPage()
       .then (p) ->
         page = p
-        page.property 'onError', (msg) ->
+        page.on 'onError', (msg) ->
           console.log "Page experienced error: #{msg}" if ModuleTest.DEBUG
-        page.property 'onConsoleMessage', (msg) ->
+        page.on 'onConsoleMessage', (msg) ->
           console.log "Page logged: #{msg}" if ModuleTest.DEBUG
         page.open "http://localhost:#{port}/codelenny-module-server/"
       .then (content) ->
