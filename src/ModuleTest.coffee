@@ -8,6 +8,7 @@ phantom = require "phantom"
 ModuleServer = require "./ModuleServer"
 {describe, it, before, after} = require "mocha"
 {exec} = require "child_process"
+chalk = require "chalk"
 
 TestDesc = require "./TestDesc"
 TestRun = require "./TestRun"
@@ -226,10 +227,15 @@ class ModuleTest
         instance.createPage()
       .then (p) ->
         page = p
-        page.on 'onError', (msg) ->
-          console.log "Page experienced error: #{msg}" if ModuleTest.DEBUG
+        page.on 'onError', (err) ->
+          return unless ModuleTest.DEBUG
+          console.log chalk.red.bold "Page experienced error"
+          console.log err
+          console.log "\n"
         page.on 'onConsoleMessage', (msg) ->
-          console.log "Page logged: #{msg}" if ModuleTest.DEBUG
+          return unless ModuleTest.DEBUG
+          console.log chalk.blue.bold "Page Logged:"
+          console.log chalk.dim.blue "  " + msg.replace("\n", "  \n")
         page.open "http://localhost:#{port}/codelenny-module-server/"
       .then (content) ->
         console.log content if ModuleTest.DEBUG
