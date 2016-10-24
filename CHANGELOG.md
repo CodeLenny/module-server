@@ -1,4 +1,11 @@
+## 0.4.2 - 2016-10-23
+
+### Changed
+- Added forgotten assets in [0.4.1](#041---2016-10-24)
+
 ## 0.4.1 - 2016-10-24
+
+**DEPRECIATED** Contains outdated assets.  Use [0.4.2](#042---2016-10-24) instead.
 
 ### Added
 - `ModuleTest#chrome` logs the URL if debug mode is on, in case the window doesn't automatically open.
