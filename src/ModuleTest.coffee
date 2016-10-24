@@ -433,7 +433,9 @@ class ModuleTest
       moduleServer.load name, path for name, path of @_load
       moduleServer.finalize()
       server = router.listen port
-      exec "google-chrome http://localhost:#{port}/codelenny-module-server/"
+      cmd = "google-chrome http://localhost:#{port}/codelenny-module-server/"
+      exec cmd
+      console.log cmd if ModuleTest.DEBUG
       describe "Developer Tools for #{@describeName}", ->
         it "Opens Developer Tools", (done) ->
           if timeout is 0
