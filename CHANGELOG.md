@@ -1,3 +1,12 @@
+## 0.4.1 - 2016-10-24
+
+### Added
+- `ModuleTest#chrome` logs the URL if debug mode is on, in case the window doesn't automatically open.
+
+### Changed
+- `ModuleTest#startPhantom` now uses `page.on` instead of `page.property` for listening, allowing other scripts to also
+  listen.
+
 ## 0.4.0 - 2016-10-06
 
 ### Breaking Changes
