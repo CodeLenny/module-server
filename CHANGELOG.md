@@ -1,3 +1,8 @@
+## Unreleased
+
+### Changed
+- Added better logging, with colors and better spacing.
+
 ## 0.4.2 - 2016-10-23
 
 ### Changed
