@@ -1,6 +1,10 @@
 ## Unreleased
 
+## 0.4.4 - 2016-11-09
+Re-publish as 0.4.3 didn't take.
+
 ## 0.4.3 - 2016-11-09
+**ERROR** publishing.  See [0.4.4](#043---2016-11-09).
 
 ### Changed
 - Added better logging, with colors and better spacing.
