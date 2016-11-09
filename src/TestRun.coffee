@@ -46,7 +46,8 @@ class TestRun
       post
         .then (data) ->
           test.cb data if test.cb
-        .then ->
+        .then =>
+          return if @state is "failed" and @currentRetry() < @retries()
           done.resolve()
 
 module.exports = TestRun

@@ -2,6 +2,7 @@
 
 ### Changed
 - Added better logging, with colors and better spacing.
+- Added checking for retries before shutting down server
 
 ## 0.4.2 - 2016-10-23
 
