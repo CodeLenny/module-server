@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 0.4.3 - 2016-11-09
+
 ### Changed
 - Added better logging, with colors and better spacing.
 - Added checking for retries before shutting down server
