@@ -304,7 +304,7 @@
       <a href='#run-dynamic'>
         #
 (ModuleTest)
-<b>run</b><span>(count = 1)</span>
+<b>run</b><span>(opts = {})</span>
       </a>
     </span>
     <span class='desc'>
@@ -733,7 +733,7 @@ Also allows adding hooks.</p>
     <p class='signature' id='run-dynamic'>
       #
 (ModuleTest)
-<b>run</b><span>(count = 1)</span>
+<b>run</b><span>(opts = {})</span>
       <br>
     </p>
     <div class='docstring'>
@@ -743,6 +743,22 @@ Also allows adding hooks.</p>
   <h3>Parameters:</h3>
   <ul class='param'>
     <li>
+      <span class='name'>opts</span>
+      <span class='type'>
+        (
+          <tt>Object, Integer</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Options to configure running tests.  If integer, sets <code>count</code>. </span>
+    </li>
+  </ul>
+  <h3>
+    Options Hash:
+    (opts):
+  </h3>
+  <ul class='options'>
+    <li>
       <span class='name'>count</span>
       <span class='type'>
         (
@@ -751,6 +767,16 @@ Also allows adding hooks.</p>
       </span>
       &mdash;
       <span class='desc'><strong>Optional</strong> the number of times to run the tests.  Defaults to <code>1</code>. </span>
+    </li>
+    <li>
+      <span class='name'>clean</span>
+      <span class='type'>
+        (
+          <tt>Boolean</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'><strong>Optional</strong> if <code>true</code>, restarts the server between tests.  If <code>false</code>, runs tests after one another, without restarting the server between tests.  Defaults to <code>false</code>. </span>
     </li>
   </ul>
   <h3>Returns:</h3>
