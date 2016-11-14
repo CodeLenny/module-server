@@ -375,18 +375,6 @@ class ModuleTest
                 .map tests, (test) -> test.route router
                 .then -> [port, router]
             .then ([port, router]) =>
-              ###
-              log = (stack, indent='') ->
-                for val in stack
-                  if val.route
-                    console.log indent + val.route.path
-                  else if val.regexp
-                    console.log indent + val.regexp
-                  else console.log val
-                  log val.route.stack, "#{indent}  " if val.route?.stack
-                  log val.handle.stack, "#{indent}  " if val.handle?.stack
-              log router._router.stack
-              ###
               server = router.listen port
               @startPhantom port
             .then (res) =>
