@@ -6,7 +6,7 @@ express = require "express"
 bodyParser = require "body-parser"
 phantom = require "phantom"
 ModuleServer = require "./ModuleServer"
-{describe, it, before, after} = require "mocha"
+{describe, it, before, beforeEach, after, afterEach} = require "mocha"
 {exec} = require "child_process"
 chalk = require "chalk"
 
@@ -346,55 +346,51 @@ class ModuleTest
 
   ###
   Runs the given tests in a [Mocha](https://mochajs.org/) `describe` block the given number of times.
-  @param {Integer} count **Optional** the number of times to run the tests.  Defaults to `1`.
+  @param {Object, Integer} opts Options to configure running tests.  If integer, sets `count`.
+  @option opts {Integer} count **Optional** the number of times to run the tests.  Defaults to `1`.
+  @option opts {Boolean} clean **Optional** if `true`, restarts the server between tests.  If `false`, runs tests after
+    one another, without restarting the server between tests.  Defaults to `false`.
   @return {ModuleTest}
   ###
-  run: (count=1) ->
-    for i in [1..count]
-      do (i, count) =>
-        name = if count is 1 then @describeName else "#{@describeName} (run #{i}/#{count})"
+  run: (opts={}) ->
+    if typeof opts is "number"
+      opts = {count: opts}
+    opts.count ?= 1
+    opts.clean ?= no
+    for i in [1..opts.count]
+      do (i, opts) =>
+        name = if opts.count is 1 then @describeName else "#{@describeName} (run #{i}/#{opts.count})"
         @_runner() name, =>
           [server, phantomInstance, phantomPage] = []
+          
           tests = (new TestRun test for test in @_tests)
-
-          started = (test.started for test in tests)
-          done = (test.done.reflect() for test in tests)
-
-          # Once a single `it` block has started to execute, start the server and a Phantom instance
-          Promise
-            .any started
-            .then (test) ->
-              # This test will be delayed as we're starting the server, so don't mark the test slow unless it takes
-              # longer than 1.5 seconds.
-              test.timeout test.timeout() + 1500
-              test.slow 1500
-            .then -> getPort()
-            .then (port) =>
-              router = @_createServer()
-              Promise
-                .map tests, (test) -> test.route router
-                .then -> [port, router]
-            .then ([port, router]) =>
-              server = router.listen port
-              @startPhantom port
-            .then (res) =>
-              [phantomInstance, phantomPage] = res
-              @_phantomInstance = phantomInstance
-              @_phantomPage = phantomPage
-            .catch (err) ->
-              console.log "Error starting tests for #{name}: #{err}"
-
-          # Once all of the tests have fully finished, tear down the server and Phantom
-          Promise
-            .all done
-            .then =>
-              phantomPage.close() if phantomPage
-              phantomInstance.exit() if phantomInstance
-              return unless server
-              new Promise (resolve, reject) -> server.close resolve
-            .catch (err) ->
-              console.log "Error tearing down after #{name}"
-              throw err
+          
+          before_hook = if opts.clean then beforeEach else before
+          before_hook =>
+            [router, port] = []
+            return getPort()
+              .then (p) =>
+                port = p
+                router = @_createServer()
+                if opts.clean
+                  next = tests.filter((test) -> not test.done.isFulfilled())[0]
+                  next.route router
+                else
+                  Promise.map tests, (test) -> test.route router
+              .then =>
+                server = router.listen port
+                @startPhantom port
+              .then (res) =>
+                [phantomInstance, phantomPage] = res
+                @_phantomInstance = phantomInstance
+                @_phantomPage = phantomPage
+          
+          after_hook = if opts.clean then afterEach else after
+          after_hook =>
+            phantomPage.close() if phantomPage
+            phantomInstance.exit() if phantomInstance
+            return unless server
+            new Promise (resolve, reject) -> server.close resolve
     @
 
   ###
