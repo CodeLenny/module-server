@@ -1,5 +1,14 @@
 ## Unreleased
 
+## 0.5.0 - 2016-11-14
+
+### Added
+- `ModuleTest#run` takes `clean` option, using beforeEach/afterEach instead of before/after calls, recreating the environment for each `onit` statement.
+
+### Modified
+- `ModuleTest#run` takes an object of options instead of a single parameter (non-breaking, uses single param if given).
+- `ModuleTest#run` uses before/after instead of internal promises to start tests
+
 ## 0.4.4 - 2016-11-09
 Re-publish as 0.4.3 didn't take.
 

@@ -35,6 +35,16 @@
       </nav>
       <div id='filecontents'>
         <h2 id="unreleased">Unreleased</h2>
+<h2 id="0-5-0-2016-11-14">0.5.0 - 2016-11-14</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><code>ModuleTest#run</code> takes <code>clean</code> option, using beforeEach/afterEach instead of before/after calls, recreating the environment for each <code>onit</code> statement.</li>
+</ul>
+<h3 id="modified">Modified</h3>
+<ul>
+<li><code>ModuleTest#run</code> takes an object of options instead of a single parameter (non-breaking, uses single param if given).</li>
+<li><code>ModuleTest#run</code> uses before/after instead of internal promises to start tests</li>
+</ul>
 <h2 id="0-4-4-2016-11-09">0.4.4 - 2016-11-09</h2><p>Re-publish as 0.4.3 didn&#39;t take.</p><h2 id="0-4-3-2016-11-09">0.4.3 - 2016-11-09</h2><p><strong>ERROR</strong> publishing.  See <a href="#043---2016-11-09">0.4.4</a>.</p><h3 id="changed">Changed</h3>
 <ul>
 <li>Added better logging, with colors and better spacing.</li>
