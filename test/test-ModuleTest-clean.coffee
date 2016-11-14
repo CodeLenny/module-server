@@ -25,9 +25,9 @@ clean
         .then (count) ->
           TestResponse.emit "second", count
     """
-    .onit "gets the first response", "first", 5000, (one) ->
+    .onit "gets the first response", "first", 7000, (one) ->
       one.should.equal "1"
-    .onit "gets the second response", "second", 5000, (two) ->
+    .onit "gets the second response", "second", 7000, (two) ->
       two.should.equal "4"
       _count = 0
     .run {count: 4, clean: yes}
