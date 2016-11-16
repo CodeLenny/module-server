@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Modified
+- Added timeouts to before/after hooks in `ModuleTest#run`
+
 ## 0.5.0 - 2016-11-14
 
 ### Added

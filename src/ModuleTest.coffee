@@ -365,13 +365,16 @@ class ModuleTest
           
           tests = (new TestRun test for test in @_tests)
           
+          mod = @
+          
           before_hook = if opts.clean then beforeEach else before
-          before_hook =>
+          before_hook ->
+            @timeout 5000
             [router, port] = []
             return getPort()
               .then (p) =>
                 port = p
-                router = @_createServer()
+                router = mod._createServer()
                 if opts.clean
                   next = tests.filter((test) -> not test.done.isFulfilled())[0]
                   next.route router
@@ -379,14 +382,15 @@ class ModuleTest
                   Promise.map tests, (test) -> test.route router
               .then =>
                 server = router.listen port
-                @startPhantom port
+                mod.startPhantom port
               .then (res) =>
                 [phantomInstance, phantomPage] = res
-                @_phantomInstance = phantomInstance
-                @_phantomPage = phantomPage
+                mod._phantomInstance = phantomInstance
+                mod._phantomPage = phantomPage
           
           after_hook = if opts.clean then afterEach else after
-          after_hook =>
+          after_hook ->
+            @timeout 5000
             phantomPage.close() if phantomPage
             phantomInstance.exit() if phantomInstance
             return unless server
