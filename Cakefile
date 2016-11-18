@@ -35,7 +35,7 @@ stream = (spawned) ->
 promisifySpawn = (spawned) ->
   new Promise (resolve, reject) ->
     spawned.on 'exit', (code, signal) ->
-      reject code if code isnt 0
+      return reject code if code isnt 0
       resolve code
 
 build = (opts) ->
@@ -70,7 +70,7 @@ task 'test', 'Run tests against ModuleServer', (opts) ->
       promisifySpawn stream launch "mocha", '--colors', '--compilers', 'coffee:coffee-script/register', {env: process.env}
     .then (code) ->
       console.log "Mocha ran successfully!"
-    .error (code) ->
+    .catch (code) ->
       console.log "Mocha failed with code #{code}"
       process.exit code
 

@@ -7,6 +7,7 @@
 
 ### Modified
 
+- Fixed `cake test` to return Mocha exit status
 - Increased default hook timeout to 8000ms (before)/6000ms (after).
 
 ## 0.5.1 - 2016-11-16
