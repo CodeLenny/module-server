@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 0.5.2 - 2016-11-18
+
 ### Added
 
 - Modularized the before/after hook timeout added in [0.5.1](#051---2016-11-16).  See `ModuleTest#_hook_timeout`.
