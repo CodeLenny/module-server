@@ -34,7 +34,19 @@
         </p>
       </nav>
       <div id='filecontents'>
-        <h2 id="0-5-1-2016-11-16">0.5.1 - 2016-11-16</h2>
+        <h2 id="unreleased">Unreleased</h2>
+<h2 id="0-5-2-2016-11-18">0.5.2 - 2016-11-18</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Modularized the before/after hook timeout added in <a href="#051---2016-11-16">0.5.1</a>.  See <code>ModuleTest#_hook_timeout</code>.</li>
+<li>Added hook retry option (<code>ModuleTest#_hook_retries</code>), defaults to 1 retry allowed.</li>
+</ul>
+<h3 id="modified">Modified</h3>
+<ul>
+<li>Fixed <code>cake test</code> to return Mocha exit status</li>
+<li>Increased default hook timeout to 8000ms (before)/6000ms (after).</li>
+</ul>
+<h2 id="0-5-1-2016-11-16">0.5.1 - 2016-11-16</h2>
 <h3 id="modified">Modified</h3>
 <ul>
 <li>Added timeouts to before/after hooks in <code>ModuleTest#run</code></li>
