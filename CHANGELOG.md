@@ -4,6 +4,10 @@
 
 - Modularized the before/after hook timeout added in [0.5.1](#051---2016-11-16).  See `ModuleTest#_hook_timeout`.
 
+### Modified
+
+- Increased default hook timeout to 8000ms (before)/6000ms (after).
+
 ## 0.5.1 - 2016-11-16
 
 ### Modified

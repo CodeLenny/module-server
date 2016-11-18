@@ -375,7 +375,7 @@ class ModuleTest
           
           before_hook = if opts.clean then beforeEach else before
           before_hook ->
-            @timeout mod._hook_timeout ? 5000
+            @timeout mod._hook_timeout ? 8000
             [router, port] = []
             return getPort()
               .then (p) =>
@@ -396,7 +396,7 @@ class ModuleTest
           
           after_hook = if opts.clean then afterEach else after
           after_hook ->
-            @timeout mod._hook_timeout ? 5000
+            @timeout mod._hook_timeout ? 6000
             phantomPage.close() if phantomPage
             phantomInstance.exit() if phantomInstance
             return unless server
