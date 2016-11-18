@@ -98,9 +98,14 @@ class ModuleTest
   
   ###
   @property {Integer} Defines the timeout (in ms) for before/after hooks, which setup up/tear down testing
-    infrastructure.  Defaults to 5000ms if no value given.
+    infrastructure.  Defaults to 8000ms before hook/6000ms after hook if no value given.
   ###
   _hook_timeout: null
+  
+  ###
+  @property {Integer} Define the number of times that before/after hooks can be retried.  Defaults to retrying once
+    after a hook failure.  Set to 0 to disable retries.
+  ###
 
   ###
   Initializes a new testing environment for a series of tests (`it` blocks) inside a single
@@ -375,6 +380,7 @@ class ModuleTest
           
           before_hook = if opts.clean then beforeEach else before
           before_hook ->
+            @retries mod._hook_retries ? 1
             @timeout mod._hook_timeout ? 8000
             [router, port] = []
             return getPort()
@@ -396,6 +402,7 @@ class ModuleTest
           
           after_hook = if opts.clean then afterEach else after
           after_hook ->
+            @retries mod._hook_retries ? 1
             @timeout mod._hook_timeout ? 6000
             phantomPage.close() if phantomPage
             phantomInstance.exit() if phantomInstance

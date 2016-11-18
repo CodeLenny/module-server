@@ -3,6 +3,7 @@
 ### Added
 
 - Modularized the before/after hook timeout added in [0.5.1](#051---2016-11-16).  See `ModuleTest#_hook_timeout`.
+- Added hook retry option (`ModuleTest#_hook_retries`), defaults to 1 retry allowed.
 
 ### Modified
 
