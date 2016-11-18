@@ -95,6 +95,12 @@ class ModuleTest
   @property {PhantomJS.Page} A pointer to the PhantomJS page.
   ###
   _phantomPage: null
+  
+  ###
+  @property {Integer} Defines the timeout (in ms) for before/after hooks, which setup up/tear down testing
+    infrastructure.  Defaults to 5000ms if no value given.
+  ###
+  _hook_timeout: null
 
   ###
   Initializes a new testing environment for a series of tests (`it` blocks) inside a single
@@ -369,7 +375,7 @@ class ModuleTest
           
           before_hook = if opts.clean then beforeEach else before
           before_hook ->
-            @timeout 5000
+            @timeout mod._hook_timeout ? 5000
             [router, port] = []
             return getPort()
               .then (p) =>
@@ -390,7 +396,7 @@ class ModuleTest
           
           after_hook = if opts.clean then afterEach else after
           after_hook ->
-            @timeout 5000
+            @timeout mod._hook_timeout ? 5000
             phantomPage.close() if phantomPage
             phantomInstance.exit() if phantomInstance
             return unless server
