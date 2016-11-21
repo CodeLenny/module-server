@@ -1,6 +1,6 @@
 ## Unreleased
 
-### Modified
+### 0.5.3 - 2016-11-21
 
 - Changed before hook in ModuleTest to use retries, manually added.
 
