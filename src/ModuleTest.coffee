@@ -379,12 +379,10 @@ class ModuleTest
           mod = @
           
           before_hook = if opts.clean then beforeEach else before
-          before_hook ->
-            @retries mod._hook_retries ? 1
-            @timeout mod._hook_timeout ? 8000
+          beforeBody = ->
             [router, port] = []
             return getPort()
-              .then (p) =>
+              .then (p) ->
                 port = p
                 router = mod._createServer()
                 if opts.clean
@@ -392,17 +390,29 @@ class ModuleTest
                   next.route router
                 else
                   Promise.map tests, (test) -> test.route router
-              .then =>
+              .then ->
                 server = router.listen port
                 mod.startPhantom port
-              .then (res) =>
+              .then (res) ->
                 [phantomInstance, phantomPage] = res
                 mod._phantomInstance = phantomInstance
                 mod._phantomPage = phantomPage
-          
+
+          before_hook ->
+            @timeout mod._hook_timeout ? 12 * 1000
+            tries = 0
+            tryBefore = =>
+              beforeBody()
+                .catch (err) =>
+                  console.log "Experienced error in before hook for #{@currentTest.fullTitle()}."
+                  console.log err
+                  throw err unless tries++ < mod._hook_timeout
+                  console.log "Retrying before hook."
+                  tryBefore()
+            tryBefore()
+
           after_hook = if opts.clean then afterEach else after
           after_hook ->
-            @retries mod._hook_retries ? 1
             @timeout mod._hook_timeout ? 6000
             phantomPage.close() if phantomPage
             phantomInstance.exit() if phantomInstance
