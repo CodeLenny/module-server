@@ -1,6 +1,14 @@
 ## Unreleased
 
-### 0.5.3 - 2016-11-21
+## 0.5.4 - 2016-11-21
+
+### Modified
+
+- Fixed `getPort` retrying in ModuleTest.
+
+## 0.5.3 - 2016-11-21
+
+### Modified
 
 - Changed before hook in ModuleTest to use retries, manually added.
 
