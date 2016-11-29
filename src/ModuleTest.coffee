@@ -31,7 +31,7 @@ getPort = (min=49152, max=65535, cb) ->
     server = net.createServer()
     server.once 'error', (err) ->
       console.log "Port #{port} taken.  Retrying."
-      getPort min, max, cb
+      resolve getPort min, max, cb
     server.once 'listening', ->
       server.close ->
         cb port if cb
@@ -95,13 +95,13 @@ class ModuleTest
   @property {PhantomJS.Page} A pointer to the PhantomJS page.
   ###
   _phantomPage: null
-  
+
   ###
   @property {Integer} Defines the timeout (in ms) for before/after hooks, which setup up/tear down testing
     infrastructure.  Defaults to 8000ms before hook/6000ms after hook if no value given.
   ###
   _hook_timeout: null
-  
+
   ###
   @property {Integer} Define the number of times that before/after hooks can be retried.  Defaults to retrying once
     after a hook failure.  Set to 0 to disable retries.
@@ -373,11 +373,11 @@ class ModuleTest
         name = if opts.count is 1 then @describeName else "#{@describeName} (run #{i}/#{opts.count})"
         @_runner() name, =>
           [server, phantomInstance, phantomPage] = []
-          
+
           tests = (new TestRun test for test in @_tests)
-          
+
           mod = @
-          
+
           before_hook = if opts.clean then beforeEach else before
           beforeBody = ->
             [router, port] = []
